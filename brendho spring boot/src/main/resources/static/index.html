@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enquete</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #87CEEB; /* Cor azul céu */
+      text-align: center;
+    }
+
+    /* Estilos para as imagens */
+    img {
+      width: 50px; /* Define a largura das imagens */
+      height: 50px; /* Define a altura das imagens */
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid #87CEEB; /* Cor azul céu para a borda da imagem */
+    }
+
+    /* Ajuste no estilo das imagens nas opções */
+    #imagemCandidato1, #imagemCandidato2 {
+      width: 50px;
+      height: 50px;
+    }
+
+    #resultados {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Criar Enquete</h1>
+
+  <!-- Formulário para criar a enquete -->
+  <form id="enqueteForm">
+    <label for="pergunta">Pergunta:</label><br>
+    <input type="text" id="pergunta" name="pergunta"><br><br>
+
+    <label for="opcao1">Candidato 1:</label><br>
+    <input type="text" id="opcao1" name="opcao1"><br>
+    <input type="file" id="imagem1" name="imagem1"><br><br>
+
+    <label for="opcao2">Candidato 2:</label><br>
+    <input type="text" id="opcao2" name="opcao2"><br>
+    <input type="file" id="imagem2" name="imagem2"><br><br>
+
+    <input type="submit" value="Criar Enquete">
+  </form>
+
+  <hr>
+
+  <!-- Seção da enquete atual -->
+  <div id="enquete">
+    <h2>Enquete Atual</h2>
+    <p id="perguntaEnquete"></p>
+    <form id="votarForm">
+      <label for="opcao1Radio"><img id="imagemCandidato1"></label><br>
+      <input type="radio" id="opcao1Radio" name="voto" value="opcao1">
+      <label for="opcao1Radio" id="opcao1Label"></label><br><br>
+
+      <label for="opcao2Radio"><img id="imagemCandidato2"></label><br>
+      <input type="radio" id="opcao2Radio" name="voto" value="opcao2">
+      <label for="opcao2Radio" id="opcao2Label"></label><br><br>
+
+      <input type="submit" value="Votar">
+    </form>
+
+    <!-- Exibição dos resultados dos votos -->
+    <div id="resultados">
+      <h3>Resultados</h3>
+      <p id="votosOpcao1">Votos para Candidato 1: <span>0</span></p>
+      <p id="votosOpcao2">Votos para Candidato 2: <span>0</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Variáveis para contar os votos de cada opção
+    let votosOpcao1 = 0;
+    let votosOpcao2 = 0;
+
+    document.getElementById('enqueteForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const pergunta = document.getElementById('pergunta').value;
+      const opcao1 = document.getElementById('opcao1').value;
+      const opcao2 = document.getElementById('opcao2').value;
+
+      document.getElementById('perguntaEnquete').innerText = pergunta;
+      document.getElementById('opcao1Label').innerText = opcao1;
+      document.getElementById('opcao2Label').innerText = opcao2;
+
+      const imagem1 = document.getElementById('imagem1').files[0];
+      const imagem2 = document.getElementById('imagem2').files[0];
+
+      if (imagem1) {
+        const reader1 = new FileReader();
+        reader1.onload = function(event) {
+          const imgElement1 = document.getElementById('imagemCandidato1');
+          imgElement1.src = event.target.result;
+        };
+        reader1.readAsDataURL(imagem1);
+      }
+
+      if (imagem2) {
+        const reader2 = new FileReader();
+        reader2.onload = function(event) {
+          const imgElement2 = document.getElementById('imagemCandidato2');
+          imgElement2.src = event.target.result;
+        };
+        reader2.readAsDataURL(imagem2);
+      }
+    });
+
+    document.getElementById('votarForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const selectedOption = document.querySelector('input[name="voto"]:checked').value;
+
+      if (selectedOption === 'opcao1') {
+        votosOpcao1++;
+        document.querySelector('#votosOpcao1 span').textContent = votosOpcao1;
+      } else if (selectedOption === 'opcao2') {
+        votosOpcao2++;
+        document.querySelector('#votosOpcao2 span').textContent = votosOpcao2;
+      }
+
+      console.log('Voto com sucesso!');
+    });
+  </script>
+
+</body>
+</html>
